@@ -9,7 +9,7 @@ A simple extension that adds a "New Python Package..." option to the Explorer co
 - Uses VS Code's native folder creation dialog for a seamless experience
 - Automatically expands the new package in the Explorer view
 
-![New Python Package in action](images/example.gif)
+![New Python Package in action](https://cdn.kanapi.dev/vsc/npp/example.gif)
 
 ## Usage
 
@@ -37,3 +37,8 @@ Users appreciate release notes as you update your extension.
 ### 1.0.0
 
 Initial release of the New Python Package extension.
+
+
+### 1.0.1
+
+Updated example image to be a url
