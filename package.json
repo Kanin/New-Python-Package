@@ -2,7 +2,7 @@
   "name": "new-python-package",
   "displayName": "New Python Package",
   "description": "Adds a 'New Python Package...' option to create Python packages with __init__.py files.",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "publisher": "KaninDev",
   "packageManager": "pnpm@10.0.0",
   "engines": {

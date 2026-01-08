@@ -2,7 +2,7 @@
 
 All notable changes to the "New Python Package" extension will be documented in this file.
 
-## [1.1.1] - 2026-01-08
+## [1.1.2] - 2026-01-08
 
 ### Fixed
 
