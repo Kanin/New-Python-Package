@@ -43,16 +43,16 @@ A powerful extension that adds a "New Python Package..." option to the Explorer 
 
 ## Documentation
 
-📖 **[Full documentation on the GitHub Wiki](https://github.com/KaninDev/new-python-package/wiki)**
+📖 **[Full documentation on the GitHub Wiki](https://github.com/Kanin/new-python-package/wiki)**
 
-- [All Settings](https://github.com/KaninDev/new-python-package/wiki/Settings)
-- [Variables & Transforms](https://github.com/KaninDev/new-python-package/wiki/Variables)
-- [Additional Files](https://github.com/KaninDev/new-python-package/wiki/Additional-Files)
-- [Example Configurations](https://github.com/KaninDev/new-python-package/wiki/Examples)
+- [All Settings](https://github.com/Kanin/new-python-package/wiki/Settings)
+- [Variables & Transforms](https://github.com/Kanin/new-python-package/wiki/Variables)
+- [Additional Files](https://github.com/Kanin/new-python-package/wiki/Additional-Files)
+- [Example Configurations](https://github.com/Kanin/new-python-package/wiki/Examples)
 
 ## Issues & Contributions
 
-Found a bug or have a feature request? Open an issue on [GitHub](https://github.com/KaninDev/new-python-package/issues).
+Found a bug or have a feature request? Open an issue on [GitHub](https://github.com/Kanin/new-python-package/issues).
 
 ## License
 
