@@ -204,6 +204,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "minimatch": "^10.1.1"
+    "minimatch": "^9.0.5"
   }
 }
