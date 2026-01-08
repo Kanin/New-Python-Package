@@ -2,7 +2,7 @@
   "name": "new-python-package",
   "displayName": "New Python Package",
   "description": "Adds a 'New Python Package...' option to create Python packages with __init__.py files.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "publisher": "KaninDev",
   "engines": {
     "vscode": "^1.99.0"
@@ -10,7 +10,11 @@
   "categories": [
     "Other"
   ],
-  "keywords": ["python", "package", "__init__"],
+  "keywords": [
+    "python",
+    "package",
+    "__init__"
+  ],
   "icon": "images/icon.png",
   "repository": {
     "type": "git",
@@ -19,10 +23,146 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "New Python Package",
+      "properties": {
+        "new-python-package.watcherTimeout": {
+          "type": "number",
+          "default": 30,
+          "minimum": 5,
+          "maximum": 120,
+          "description": "Timeout in seconds for detecting new folder creation."
+        },
+        "new-python-package.initFileContent": {
+          "type": "string",
+          "default": "",
+          "editPresentation": "multilineText",
+          "description": "Default content for __init__.py files. Supports variables like ${name}, ${name:pascal}, etc. Overridden by initFileRules if a rule matches."
+        },
+        "new-python-package.initFileSnippet": {
+          "type": "string",
+          "default": "",
+          "description": "VS Code snippet name to insert in __init__.py. Overridden by initFileRules if a rule matches."
+        },
+        "new-python-package.initFileRules": {
+          "type": "array",
+          "default": [],
+          "markdownDescription": "Conditional rules for `__init__.py` content. First matching rule wins. Falls back to `initFileContent`/`initFileSnippet` if no rules match.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "object",
+                "description": "Conditions for when this rule applies.",
+                "properties": {
+                  "pathMatches": {
+                    "type": "string",
+                    "description": "Glob pattern the package path must match."
+                  },
+                  "nameMatches": {
+                    "type": "string",
+                    "description": "Regex pattern the package name must match."
+                  },
+                  "workspaceContains": {
+                    "type": "string",
+                    "description": "Glob pattern for files that must exist in workspace."
+                  }
+                }
+              },
+              "content": {
+                "type": "string",
+                "description": "Content for __init__.py. Supports variables."
+              },
+              "snippet": {
+                "type": "string",
+                "description": "VS Code snippet name to insert."
+              },
+              "templateFile": {
+                "type": "string",
+                "description": "Path to a template file."
+              }
+            }
+          }
+        },
+        "new-python-package.openFilesAfterCreation": {
+          "type": "boolean",
+          "default": false,
+          "description": "Open created files in the editor after package creation."
+        },
+        "new-python-package.ensureParentPackages": {
+          "type": "boolean",
+          "default": false,
+          "description": "Create __init__.py in parent directories (up to workspace root) if missing."
+        },
+        "new-python-package.additionalFiles": {
+          "type": "array",
+          "default": [],
+          "markdownDescription": "Rules for creating additional files. Each rule has optional `when` conditions and required `files` array.\n\n**Variables:** `${name}`, `${parent}`, `${date}`, `${year}`\n\n**Transforms:** `:upper`, `:lower`, `:capitalize`, `:pascal`, `:camel`, `:snake`, `:replace:X:Y`, `:slice:N:M`\n\n**Example:** `${name:pascal}` transforms `my_module` → `MyModule`",
+          "items": {
+            "type": "object",
+            "required": [
+              "files"
+            ],
+            "properties": {
+              "when": {
+                "type": "object",
+                "description": "Conditions for when this rule applies. All specified conditions must match.",
+                "properties": {
+                  "pathMatches": {
+                    "type": "string",
+                    "markdownDescription": "Glob pattern the full package path must match.\n\n**Examples:**\n- `**/modules/**` — any package under a `modules` folder\n- `**/tests/**` — any package under `tests`\n- `**/modules/{cogs,events}/**` — packages under `modules/cogs` or `modules/events`"
+                  },
+                  "nameMatches": {
+                    "type": "string",
+                    "markdownDescription": "Regex pattern the package name must match.\n\n**Examples:**\n- `^test_` — names starting with `test_`\n- `_test$` — names ending with `_test`\n- `.*` — any name (default)"
+                  },
+                  "workspaceContains": {
+                    "type": "string",
+                    "markdownDescription": "Glob pattern for files that must exist in workspace.\n\n**Examples:**\n- `pyproject.toml`\n- `**/pytest.ini`\n- `setup.py`"
+                  }
+                }
+              },
+              "files": {
+                "type": "array",
+                "description": "Files to create when conditions match.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "name"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "markdownDescription": "File name with optional variables.\n\n**Examples:**\n- `${name}.py`\n- `test_${name}.py`\n- `${name:pascal}.py`"
+                    },
+                    "content": {
+                      "type": "string",
+                      "markdownDescription": "Inline file content with variables. Use for short content.\n\n**Example:**\n```python\nclass ${name:pascal}:\n    pass\n```"
+                    },
+                    "snippet": {
+                      "type": "string",
+                      "markdownDescription": "VS Code snippet name to insert. The file will be opened and the snippet inserted with full snippet features (tabstops, placeholders, choices).\n\n**Example:** `\"python-cog\"` (references a snippet you've defined)"
+                    },
+                    "templateFile": {
+                      "type": "string",
+                      "markdownDescription": "Path to a template file (relative to workspace root). The template content supports all variables.\n\n**Examples:**\n- `.vscode/templates/cog.py`\n- `templates/${parent}.py.template`"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "commands": [
       {
         "command": "new-python-package.generatePackage",
         "title": "New Python Package..."
+      },
+      {
+        "command": "new-python-package.whatsNew",
+        "title": "New Python Package: What's New"
       }
     ],
     "menus": {
@@ -50,17 +190,20 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.99.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.99.0",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
-    "eslint": "^9.23.0",
-    "esbuild": "^0.25.1",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.8.2",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "esbuild": "^0.25.1",
+    "eslint": "^9.23.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.8.2"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "minimatch": "^10.1.1"
+  }
 }

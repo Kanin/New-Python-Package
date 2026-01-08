@@ -1,44 +1,59 @@
 # New Python Package for VS Code
 
-A simple extension that adds a "New Python Package..." option to the Explorer context menu, creating Python package directories with an `__init__.py` file.
-
-## Features
-
-- Adds a "New Python Package..." option right after "New Folder..." in the Explorer context menu
-- Creates a Python package directory with an empty `__init__.py` file inside
-- Uses VS Code's native folder creation dialog for a seamless experience
-- Automatically expands the new package in the Explorer view
+A powerful extension that adds a "New Python Package..." option to the Explorer context menu. Create Python packages with customizable `__init__.py` files, automatic additional files, snippet support, and conditional content based on your project structure.
 
 ![New Python Package in action](https://cdn.kanapi.dev/vsc/npp/example.gif)
 
+## Features
+
+- **Context Menu Integration** - "New Python Package..." appears right after "New Folder..."
+- **Variable Interpolation** - Use `${name}`, `${name:pascal}`, and more in your content
+- **Conditional Content** - Different `__init__.py` content based on location or package name
+- **Additional Files** - Auto-generate extra files (models, views, tests, etc.)
+- **Snippet Support** - Insert VS Code snippets with full tabstop support
+- **Template Files** - Use external template files for complex boilerplate
+- **Parent Packages** - Automatically create `__init__.py` in parent folders
+
 ## Usage
 
-1. Right-click on any folder in the Explorer view
-2. Select "New Python Package..." from the context menu
-3. Enter a name for your new package
-4. The extension will add an `__init__.py` file automatically
+1. Right-click on any folder in the Explorer
+2. Select **"New Python Package..."**
+3. Name your package
+4. Done! Your package is created with all configured files
 
-## Requirements
+## Quick Example
 
-No special requirements or dependencies.
+```json
+{
+  "new-python-package.initFileContent": "\"\"\"${name:pascal} package.\"\"\"",
+  "new-python-package.openFilesAfterCreation": true,
+  "new-python-package.additionalFiles": [
+    {
+      "when": { "pathMatches": "**/models/**" },
+      "files": [
+        {
+          "name": "${name}.py",
+          "content": "class ${name:pascal}:\n    pass"
+        }
+      ]
+    }
+  ]
+}
+```
 
-## Extension Settings
+## Documentation
 
-This extension does not add any settings.
+📖 **[Full documentation on the GitHub Wiki](https://github.com/KaninDev/new-python-package/wiki)**
 
-## Known Issues
+- [All Settings](https://github.com/KaninDev/new-python-package/wiki/Settings)
+- [Variables & Transforms](https://github.com/KaninDev/new-python-package/wiki/Variables)
+- [Additional Files](https://github.com/KaninDev/new-python-package/wiki/Additional-Files)
+- [Example Configurations](https://github.com/KaninDev/new-python-package/wiki/Examples)
 
-Please report issues on the [GitHub repository](https://github.com/Kanin/new-python-package/issues).
+## Issues & Contributions
 
-## Release Notes
+Found a bug or have a feature request? Open an issue on [GitHub](https://github.com/KaninDev/new-python-package/issues).
 
-Users appreciate release notes as you update your extension.
+## License
 
-### 1.0.0
-
-Initial release of the New Python Package extension.
-
-
-### 1.0.1
-
-Updated example image to be a url
+MIT

@@ -7,8 +7,9 @@ All settings start with `new-python-package.` in your VS Code settings.
 | Setting | Type | Default | What it does |
 |---------|------|---------|--------------|
 | `watcherTimeout` | number | `30` | How long to wait for folder creation (seconds) |
-| `initFileContent` | string | `""` | Content to put in `__init__.py` |
-| `initFileSnippet` | string | `""` | VS Code snippet to insert in `__init__.py` |
+| `initFileContent` | string | `""` | Default content for `__init__.py` |
+| `initFileSnippet` | string | `""` | Default snippet to insert in `__init__.py` |
+| `initFileRules` | array | `[]` | Conditional rules for `__init__.py` content |
 | `openFilesAfterCreation` | boolean | `false` | Open files after creating them |
 | `ensureParentPackages` | boolean | `false` | Create `__init__.py` in parent folders too |
 | `additionalFiles` | array | `[]` | Rules for creating extra files |
@@ -31,7 +32,7 @@ Default is 30 seconds, which should be plenty. Bump it up if you're a slow typer
 
 ## initFileContent
 
-What goes inside your `__init__.py` files. Supports [[Variables]].
+Default content for `__init__.py` files. Supports [[Variables]]. Gets overridden by `initFileRules` if a rule matches.
 
 **Empty (default):**
 ```json
@@ -58,7 +59,7 @@ What goes inside your `__init__.py` files. Supports [[Variables]].
 
 ## initFileSnippet
 
-Instead of static content, you can have a VS Code snippet inserted. The file opens and the snippet runs with full tabstop/placeholder support.
+Default snippet to insert in `__init__.py`. Gets overridden by `initFileRules` if a rule matches.
 
 ```json
 {
@@ -69,6 +70,51 @@ Instead of static content, you can have a VS Code snippet inserted. The file ope
 This looks for a snippet named "python-init" in your user snippets or an extension. Great if you want interactive placeholders.
 
 You can use both `initFileContent` and `initFileSnippet` together - the content gets written first, then the snippet is inserted.
+
+---
+
+## initFileRules
+
+Conditional rules for `__init__.py` content. First matching rule wins. Falls back to `initFileContent`/`initFileSnippet` if nothing matches.
+
+Uses the same `when` conditions as `additionalFiles`:
+
+- `pathMatches` - glob pattern the package path must match
+- `nameMatches` - regex the package name must match
+- `workspaceContains` - glob for files that must exist in workspace
+
+Each rule can have:
+- `content` - string content (supports [[Variables]])
+- `snippet` - VS Code snippet name
+- `templateFile` - path to a template file
+
+**Example: Different content based on location**
+
+```json
+{
+  "new-python-package.initFileRules": [
+    {
+      "when": { "pathMatches": "**/cogs/**" },
+      "snippet": "Cog Package Setup"
+    },
+    {
+      "when": { "pathMatches": "**/api/**" },
+      "content": "\"\"\"API module: ${name}.\"\"\"\n\n__all__ = []"
+    },
+    {
+      "when": { "nameMatches": "^test" },
+      "content": "# Test package: ${name}"
+    }
+  ],
+  "new-python-package.initFileContent": "# ${name}"
+}
+```
+
+In this setup:
+- Packages under `cogs/` get a snippet
+- Packages under `api/` get API-specific content
+- Packages starting with "test" get a test comment
+- Everything else falls back to `# ${name}`
 
 ---
 
