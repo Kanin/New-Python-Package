@@ -2,6 +2,12 @@
 
 All notable changes to the "New Python Package" extension will be documented in this file.
 
+## [1.1.1] - 2026-01-08
+
+### Fixed
+
+- What's New page now shows on first install and updates (previously only showed on updates)
+
 ## [1.1.0] - 2026-01-08
 
 ### New Features

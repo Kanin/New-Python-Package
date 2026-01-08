@@ -10,6 +10,13 @@ interface ReleaseNote {
 
 const releaseNotes: ReleaseNote[] = [
   {
+    version: "1.1.1",
+    date: "2026-01-08",
+    changes: [
+      "🐛 Fixed this page not showing on install/update... oops!",
+    ],
+  },
+  {
     version: "1.1.0",
     date: "2026-01-08",
     changes: [
@@ -49,13 +56,9 @@ export function checkForUpdates(context: vscode.ExtensionContext): void {
   const lastVersion = context.globalState.get<string>(LAST_VERSION_KEY);
 
   if (lastVersion !== currentVersion) {
-    // First install or update
+    // Show What's New page on first install or update
+    showWhatsNew(context);
     context.globalState.update(LAST_VERSION_KEY, currentVersion);
-
-    // Don't show on first install (no lastVersion)
-    if (lastVersion) {
-      showWhatsNew(context);
-    }
   }
 }
 
