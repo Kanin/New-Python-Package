@@ -10,7 +10,7 @@ interface ReleaseNote {
 
 const releaseNotes: ReleaseNote[] = [
   {
-    version: "1.1.2",
+    version: "1.1.3",
     date: "2026-01-08",
     changes: [
       "🐛 Fixed this page not showing on install/update... oops!",
